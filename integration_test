@@ -1,0 +1,32 @@
+#!/bin/bash
+set -xeuo pipefail
+
+testctl get
+export KUBECONFIG=$(pwd)/kubeconfig
+for X in *; do
+    ./testctl-rsync.sh $X /root/
+done
+
+# TODO: run terraform to install mlflow
+
+#./testctl-ssh.sh -- terraform init
+#./testctl-ssh.sh -- terraform apply -auto-approve
+
+# TODO: terraformify these bits
+
+./testctl-ssh.sh -- kubectl apply -f deploy.yaml
+./testctl-ssh.sh -- bodywork setup-namespace bodywork
+./testctl-ssh.sh -- bodywork secret create \
+    --namespace=bodywork \
+    --name=mlflow-credentials \
+    --data MLFLOW_TRACKING_URI=http://mlflow.mlflow.svc.cluster.local:5000 \
+        MLFLOW_S3_ENDPOINT_URL=http://minio.mlflow.svc.cluster.local:9000 \
+        AWS_ACCESS_KEY_ID=minio \
+        AWS_SECRET_ACCESS_KEY=minio123
+
+# TODO: these commands should go into the user facing documentation, once we
+# have an SSH shell in the browser
+./testctl-ssh.sh -- bodywork workflow \
+    --namespace=bodywork \
+    https://github.com/bodywork-ml/bodywork-ml-pipeline-project \
+    master
