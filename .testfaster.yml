@@ -28,7 +28,7 @@ base:
     # already running when you testctl get
     #!/bin/bash
     set -euo pipefail
-    git clone https://github.com/combinator-ml/terraform-k8s-stack-bodywork-mlflow
+    git clone https://github.com/combinator-ml/terraform-k8s-mlflow
     cd terraform-k8s-stack-bodywork-mlflow
     git checkout f0e9759c6d99700f4e1b70e6207bc3a04ce08f2b
     cd terraform-module-bodywork
