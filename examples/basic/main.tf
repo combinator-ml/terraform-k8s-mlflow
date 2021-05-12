@@ -1,0 +1,3 @@
+module "combinator-module" {
+  source = "../../"
+}

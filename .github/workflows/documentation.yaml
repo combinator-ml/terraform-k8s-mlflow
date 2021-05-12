@@ -1,0 +1,18 @@
+name: Generate terraform docs
+on:
+  - pull_request
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+    - name: Render terraform docs and push changes back to PR
+      uses: terraform-docs/gh-actions@v0.6.0
+      with:
+        working-dir: .
+        git-push: "true"
+        config-file: .terraform-docs.yml
+        output-file: README.md
+        output-method: replace

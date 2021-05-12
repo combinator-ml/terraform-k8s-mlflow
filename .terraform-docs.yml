@@ -1,0 +1,14 @@
+formatter: markdown
+header-from: .header.md
+# footer-from: .footer.md
+sections:
+  show-all: true
+sort:
+  enabled: true
+  by:
+    - required
+output:
+  file: README.md
+  mode: replace
+  template: |-
+    {{ .Content }}
