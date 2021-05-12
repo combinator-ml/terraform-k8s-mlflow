@@ -1,4 +1,4 @@
-name: quality
+name: pre-commit
 on:
   push:
     branches: [ main, master ]
