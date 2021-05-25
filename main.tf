@@ -12,19 +12,13 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path    = "/root/.kube/config"
-  config_context = "minikube"
 }
 
 provider "k8s" {
-  config_path    = "/root/.kube/config"
-  config_context = "minikube"
 }
 
 provider "helm" {
   kubernetes {
-   config_path    = "/root/.kube/config"
-   config_context = "minikube"
  }
 }
 
