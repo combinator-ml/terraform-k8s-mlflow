@@ -37,8 +37,8 @@ base:
   kubernetes_version: v1.17.11
 
 runtime:
-  cpus: 1
-  memory: 2GB
+  cpus: 2
+  memory: 4GB
   disk: 10GB
 prewarm_pool_size: 4
 max_pool_size: 16
