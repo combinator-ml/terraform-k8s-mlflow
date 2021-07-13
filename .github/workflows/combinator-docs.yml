@@ -10,7 +10,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     env:
-      COMBINATOR_DOCS_FILE: "!your/combinator/website/path/here!"
+      COMBINATOR_DOCS_FILE: "docs/components/govern/mlflow.md"
       COMBINATOR_REPO: combinator-ml/combinator
       COMBINATOR_PATH: combinator
       LOCAL_PATH: local
