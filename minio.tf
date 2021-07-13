@@ -13,7 +13,7 @@ resource "helm_release" "minio" {
 
   values = [
     yamlencode({ accessKey = "minio"
-      secretKey            = "minio123"
+      secretKey            = "minio123" # pragma: allowlist secret
       generate-name        = "minio/minio"
       service = {
         port = 9000

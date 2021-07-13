@@ -5,14 +5,14 @@ locals {
     backendStore = {
       mysql = {
         username = "mlflow"
-        password = "mlflow123" # TODO: Generate passwords
+        password = "mlflow123" # TODO: Generate passwords # pragma: allowlist secret
         host     = "${var.name_prefix}-database-mysql.${var.namespace}.svc.cluster.local"
         port     = 3306
         database = "mlflow"
       }
     }
     awsAccessKeyId      = "minio"    # module.minio.CONSOLE_ACCESS_KEY
-    awsSecretAccessKey  = "minio123" # module.minio.CONSOLE_SECRET_KEY
+    awsSecretAccessKey  = "minio123" # module.minio.CONSOLE_SECRET_KEY # pragma: allowlist secret
     s3EndpointUrl       = "http://minio.${var.namespace}.svc.cluster.local:9000"
     defaultArtifactRoot = "s3://mlflow-artifacts/"
   }
@@ -21,10 +21,10 @@ locals {
   database_chart_version    = "8.0.0"
   database_values = {
     auth = {
-      rootPassword = "mysql123" # TODO: Generate passwords
+      rootPassword = "mysql123" # TODO: Generate passwords # pragma: allowlist secret
       database     = "mlflow"
       username     = "mlflow"
-      password     = "mlflow123" # TODO: Generate passwords
+      password     = "mlflow123" # TODO: Generate passwords # pragma: allowlist secret
     }
   }
 }

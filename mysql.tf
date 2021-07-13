@@ -21,6 +21,6 @@ resource "kubernetes_secret" "database_password" {
     namespace = var.namespace
   }
   data = {
-    password = "mlflow123" # TODO: Generate passwords
+    password = "mlflow123" # TODO: Generate passwords # pragma: allowlist secret
   }
 }

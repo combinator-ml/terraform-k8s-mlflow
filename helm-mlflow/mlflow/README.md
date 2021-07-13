@@ -67,7 +67,7 @@ Supporting other database engine is not in my plans, but if you're planning to f
 * Publish a new docker image with the right dependencies installed.
 * Fork this repository and modify the
   - [values.yaml](values.yaml) - add configuration for the new engine
-  - [secret.yaml](templates/secret.yaml) - add a new secret for your engine 
+  - [secret.yaml](templates/secret.yaml) - add a new secret for your engine
   - [deployment.yaml](templates/deployment.yaml) - inject the right secret and pass the right argument to the container
 
 
