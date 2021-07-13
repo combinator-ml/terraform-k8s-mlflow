@@ -1,4 +1,4 @@
-name: MLflow
+name: MLFlow
 base:
   kernel_image: quay.io/testfaster/ignite-kernel
   os_dockerfile: |-
@@ -28,12 +28,12 @@ base:
     # already running when you testctl get
     #!/bin/bash
     set -euo pipefail
-    git clone https://github.com/combinator-ml/terraform-k8s-mlflow
-    cd terraform-k8s-stack-bodywork-mlflow
-    git checkout f0e9759c6d99700f4e1b70e6207bc3a04ce08f2b
-    cd terraform-module-bodywork
+    git clone https://github.com/combinator-ml/terraform-k8s-mlflow repo
+    cd repo
+    git checkout 4ed6d7f28a6e644ef7f4e7f3465ecd1ae5470bb3
+    cd examples/testfaster
     terraform init
-    terraform apply -auto-approve
+    KUBE_CONFIG_PATH=~/.kube/config terraform apply -auto-approve
 
   # Need kube 1.17 for kubeflow last time I checked (1.18 doesn't work).
   # https://github.com/kubeflow/kubeflow/issues/5246#issuecomment-682013220
@@ -44,9 +44,9 @@ runtime:
   memory: 12GB
   disk: 50GB
 # How many ready VMs to keep running for instant testctl get
-prewarm_pool_size: 1
+prewarm_pool_size: 2
 # Upper bound for pool size, e.g. to keep memory usage sensible
-max_pool_size: 2
+max_pool_size: 4
 # Timeout VMs after this long. Set to "" if you want to use
 # the VMs for long running development purposes rather than
 # short-lived CI.
@@ -55,12 +55,14 @@ pool_sleep_timeout: "never"
 shared: true
 
 launch:
-  title: Bodywork + MLflow
+  title: MLFlow
   buttons:
-    - title: MLflow
+    - title: MLFlow
       port: 30600
-   #- title: Model
-   #  port: 30600 <- change this!
+    - title: Minio
+      port: 30650
+    - title: Jupyter
+      port: 31380
   homepage: |
-    ## Follow the tutorial below
-    Click the buttons to the left to launch the MLflow web interface.
+    ## Instructions
+    Click the buttons to launch the UIs. Follow the tutorial in the Jupyter notebook to write data to MLFlow.
