@@ -1,0 +1,68 @@
+name: MLFlow
+base:
+  kernel_image: quay.io/testfaster/ignite-kernel
+  os_dockerfile: |-
+    # This dockerfile defines the base disk image for your VMs
+    FROM quay.io/testfaster/kube-ubuntu
+    ENV bump-cache 1
+    RUN apt update
+    RUN apt install gnupg2 software-properties-common rsync -y
+    RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+    RUN apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    RUN apt install terraform -y
+  docker_bake_script: |-
+    # Do things that cache docker images for faster builds,
+    # like building a prior version of your software.
+    # Docker buildkit cache is preserved!
+    #!/bin/bash
+    set -euo pipefail
+    docker pull busybox:1.32.0
+  preload_docker_images: []
+    # NB: use:
+    #     testctl ssh --tty=false -- docker images --format "{{.Repository}}:{{.Tag}}" |sort |sed 's/^/    - /g'
+    # and then remove ':<none>' tags
+    # to refresh this list
+  prewarm_script: |-
+    # This gets run after each individual VM starts up, so
+    # start services you need in your tests here and they'll be
+    # already running when you testctl get
+    #!/bin/bash
+    set -euo pipefail
+    git clone https://github.com/combinator-ml/terraform-k8s-mlflow repo
+    cd repo
+    git checkout 4ed6d7f28a6e644ef7f4e7f3465ecd1ae5470bb3
+    cd examples/testfaster
+    terraform init
+    KUBE_CONFIG_PATH=~/.kube/config terraform apply -auto-approve
+
+  # Need kube 1.17 for kubeflow last time I checked (1.18 doesn't work).
+  # https://github.com/kubeflow/kubeflow/issues/5246#issuecomment-682013220
+  kubernetes_version: v1.17.11
+
+runtime:
+  cpus: 4
+  memory: 12GB
+  disk: 50GB
+# How many ready VMs to keep running for instant testctl get
+prewarm_pool_size: 2
+# Upper bound for pool size, e.g. to keep memory usage sensible
+max_pool_size: 4
+# Timeout VMs after this long. Set to "" if you want to use
+# the VMs for long running development purposes rather than
+# short-lived CI.
+default_lease_timeout: ""
+pool_sleep_timeout: "never"
+shared: true
+
+launch:
+  title: MLFlow
+  buttons:
+    - title: MLFlow
+      port: 30600
+    - title: Minio
+      port: 30650
+    - title: Jupyter
+      port: 31380
+  homepage: |
+    ## Instructions
+    Click the buttons to launch the UIs. Follow the tutorial in the Jupyter notebook to write data to MLFlow.
