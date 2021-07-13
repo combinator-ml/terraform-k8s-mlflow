@@ -1,14 +1,50 @@
-# MLflow
+# terraform-{{ provider }}-{{ component/stack }}
 
-Try easily with testfaster (get a free account at [https://testfaster.ci](https://testfaster.ci) and then run the commands at [https://testfaster.ci/access_token](https://testfaster.ci/access_token)).
+{{ Insert brief overview here - this file will be injected into the README by the github action }}
 
-```
-./integration_test
+## Usage
+
+```terraform
+module "{{ component/stack }}" {
+  source  = "combinator-ml/{{ component/stack }}/{{ provider }}"
+  version = "0.0.0"
+}
 ```
 
-Or deploy against a k8s cluster:
+See the full configuration options below.
 
-```
-TODO: edit tfvars instructions
-terraform apply
-```
+## Known Issues
+
+- {{ Known Issue 1 }}
+  {{ Known Issue description }}
+- ...
+
+## Requirements
+
+No requirements.
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| kubernetes | n/a |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [kubernetes_namespace](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| namespace | The namespace to install into. | `string` | `"default"` | no |
+
+## Outputs
+
+No output.

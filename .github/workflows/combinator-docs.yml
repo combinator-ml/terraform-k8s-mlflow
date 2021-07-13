@@ -1,0 +1,58 @@
+name: Update Combinator Docs
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'README.md'
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    env:
+      COMBINATOR_DOCS_FILE: "!your/combinator/website/path/here!"
+      COMBINATOR_REPO: combinator-ml/combinator
+      COMBINATOR_PATH: combinator
+      LOCAL_PATH: local
+    steps:
+      - name: Checkout Local
+        uses: actions/checkout@v2
+        with:
+          path: ${{ env.LOCAL_PATH }}
+      - name: Checkout Combinator Website
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.CI_TOKEN }}
+          repository: ${{ env.COMBINATOR_REPO }}
+          path: ${{ env.COMBINATOR_PATH }}
+      - name: Checkout Branch
+        run: |
+          cd ${COMBINATOR_PATH}
+          git checkout -b docs/${GITHUB_REPOSITORY}
+          git pull origin docs/${GITHUB_REPOSITORY} || true
+      - name: Copy Readme
+        run: |
+          cp ./${LOCAL_PATH}/README.md ./${COMBINATOR_PATH}/${COMBINATOR_DOCS_FILE}
+      - name: Create PR
+        env:
+          GIT_USERNAME: action
+          GIT_EMAIL: action@github.com
+        run: |
+          cd ${COMBINATOR_PATH}
+          git config --local user.name "${GIT_USERNAME}"
+          git config --local user.email "${GIT_EMAIL}"
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Your docs are up-to-date, no PR required."
+          else
+            echo "Docs are out of date"
+            git --no-pager diff
+            git add .
+            git commit -m "docs: auto-update docs from ${GITHUB_REPOSITORY}"
+            git push --set-upstream origin docs/${GITHUB_REPOSITORY}
+            curl \
+              -X POST \
+              -H "Authorization: token ${{ secrets.CI_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${COMBINATOR_REPO}/pulls \
+              -d "{\"head\":\"docs/${GITHUB_REPOSITORY}\",\"base\":\"main\", \"title\": \"docs: auto-update docs from ${GITHUB_REPOSITORY}\"}"
+          fi
