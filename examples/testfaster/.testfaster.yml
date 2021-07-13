@@ -1,4 +1,4 @@
-name: MLFlow
+name: MLFlow - Combinator Component
 base:
   kernel_image: quay.io/testfaster/ignite-kernel
   os_dockerfile: |-
@@ -10,48 +10,40 @@ base:
     RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
     RUN apt-add-repository "deb [arch=$(dpkg --print-architecture)] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
     RUN apt install terraform -y
-  docker_bake_script: |-
-    # Do things that cache docker images for faster builds,
-    # like building a prior version of your software.
-    # Docker buildkit cache is preserved!
-    #!/bin/bash
-    set -euo pipefail
-    docker pull busybox:1.32.0
-  preload_docker_images: []
-    # NB: use:
-    #     testctl ssh --tty=false -- docker images --format "{{.Repository}}:{{.Tag}}" |sort |sed 's/^/    - /g'
-    # and then remove ':<none>' tags
-    # to refresh this list
+  preload_docker_images:
+    - bitnami/mysql:8.0.22-debian-10-r23
+    - busybox:1.32.0
+    - gcr.io/k8s-minikube/storage-provisioner:v1.8.1
+    - jupyter/scipy-notebook:python-3.9.2
+    - k8s.gcr.io/coredns:1.6.5
+    - k8s.gcr.io/etcd:3.4.3-0
+    - k8s.gcr.io/kube-apiserver:v1.17.11
+    - k8s.gcr.io/kube-controller-manager:v1.17.11
+    - k8s.gcr.io/kube-proxy:v1.17.11
+    - k8s.gcr.io/kube-scheduler:v1.17.11
+    - k8s.gcr.io/pause:3.1
+    - minio/minio:RELEASE.2020-12-03T05-49-24Z
+    - quay.io/helix-ml/mlflow:1.15.0
   prewarm_script: |-
-    # This gets run after each individual VM starts up, so
-    # start services you need in your tests here and they'll be
-    # already running when you testctl get
     #!/bin/bash
     set -euo pipefail
     git clone https://github.com/combinator-ml/terraform-k8s-mlflow repo
     cd repo
-    git checkout 4ed6d7f28a6e644ef7f4e7f3465ecd1ae5470bb3
+    git checkout de560ba2b43650f4e1d6974c4c9d529c42357cf8
     cd examples/testfaster
     terraform init
     KUBE_CONFIG_PATH=~/.kube/config terraform apply -auto-approve
 
-  # Need kube 1.17 for kubeflow last time I checked (1.18 doesn't work).
-  # https://github.com/kubeflow/kubeflow/issues/5246#issuecomment-682013220
   kubernetes_version: v1.17.11
 
 runtime:
-  cpus: 4
-  memory: 12GB
-  disk: 50GB
-# How many ready VMs to keep running for instant testctl get
-prewarm_pool_size: 2
-# Upper bound for pool size, e.g. to keep memory usage sensible
-max_pool_size: 4
-# Timeout VMs after this long. Set to "" if you want to use
-# the VMs for long running development purposes rather than
-# short-lived CI.
-default_lease_timeout: ""
-pool_sleep_timeout: "never"
+  cpus: 1
+  memory: 2GB
+  disk: 10GB
+prewarm_pool_size: 4
+max_pool_size: 16
+default_lease_timeout: "1h"
+pool_sleep_timeout: "1w"
 shared: true
 
 launch:
