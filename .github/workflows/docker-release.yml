@@ -7,6 +7,11 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    if:
+      !contains('
+        refs/heads/master
+        refs/heads/main
+      ', github.ref)
     steps:
     - uses: actions/checkout@v2
     - name: Set up QEMU
@@ -25,7 +30,6 @@ jobs:
   push:
     name: Push to registry
     runs-on: ubuntu-latest
-    needs: [test]
     if:
       contains('
         refs/heads/master
