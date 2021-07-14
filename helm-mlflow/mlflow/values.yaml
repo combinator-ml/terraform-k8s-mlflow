@@ -28,7 +28,7 @@ image:
   repository: ghcr.io/combinator-ml/mlflow
 
   # image.tag -- The tag for the repository (e.g. 'latest')
-  tag: 1.13.1
+  tag: 1.18.0
 
 imagePullSecrets: []
 nameOverride: ""
