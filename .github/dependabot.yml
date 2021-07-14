@@ -1,7 +1,7 @@
 # Basic set up for three package managers
 version: 2
 updates:
-  - package-ecosystem: "python"
+  - package-ecosystem: "pip"
     directory: "docker"
     schedule:
       interval: "daily"
