@@ -11,8 +11,9 @@ resource "kubernetes_namespace" "namespace" {
 }
 
 module "mlflow" {
-  source    = "combinator-ml/mlflow/k8s"
-  namespace = var.namespace
+  depends_on = [kubernetes_namespace.namespace]
+  source     = "../.."
+  namespace  = var.namespace
 }
 
 module "jupyter" {
@@ -23,6 +24,7 @@ module "jupyter" {
 }
 
 resource "kubernetes_service" "mlflow_external" {
+  depends_on = [module.mlflow]
   metadata {
     name      = "mlflow-external"
     namespace = var.namespace
@@ -41,6 +43,7 @@ resource "kubernetes_service" "mlflow_external" {
 }
 
 resource "kubernetes_service" "minio_external" {
+  depends_on = [module.mlflow]
   metadata {
     name      = "minio-external"
     namespace = var.namespace
@@ -59,6 +62,7 @@ resource "kubernetes_service" "minio_external" {
 }
 
 resource "kubernetes_service" "jupyter" {
+  depends_on = [module.jupyter]
   metadata {
     name      = "jupyter-external"
     namespace = var.namespace
