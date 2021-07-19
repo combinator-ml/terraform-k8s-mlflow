@@ -23,6 +23,11 @@ resource "helm_release" "minio" {
           memory = "256Mi"
         }
       }
+      buckets = [{
+        name = "mlflow-artifacts"
+        policy = "none"
+        purge = "false"
+      }]
     })
   ]
 }
