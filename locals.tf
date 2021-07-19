@@ -13,7 +13,7 @@ locals {
     }
     awsAccessKeyId      = "minio"    # module.minio.CONSOLE_ACCESS_KEY
     awsSecretAccessKey  = "minio123" # module.minio.CONSOLE_SECRET_KEY # pragma: allowlist secret
-    s3EndpointUrl       = "http://minio.${var.namespace}.svc.cluster.local:9000"
+    s3EndpointUrl       = "http://${var.name_prefix}-minio.${var.namespace}.svc.cluster.local:9000"
     defaultArtifactRoot = "s3://mlflow-artifacts/"
   }
   database_chart_repository = "https://charts.bitnami.com/bitnami"
