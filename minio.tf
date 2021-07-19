@@ -24,9 +24,9 @@ resource "helm_release" "minio" {
         }
       }
       buckets = [{
-        name = "mlflow-artifacts"
+        name   = "mlflow-artifacts"
         policy = "none"
-        purge = "false"
+        purge  = "false"
       }]
     })
   ]
