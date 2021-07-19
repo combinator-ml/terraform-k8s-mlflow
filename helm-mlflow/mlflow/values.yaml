@@ -15,7 +15,8 @@ backendStore:
 defaultArtifactRoot:
 
 # extraArgs -- A map of arguments and values to pass to the `mlflow server` command
-extraArgs: {}
+extraArgs:
+  {}
   # workers: 2
   # expose-prometheus: yes
 
@@ -28,7 +29,7 @@ image:
   repository: ghcr.io/combinator-ml/mlflow
 
   # image.tag -- The tag for the repository (e.g. 'latest')
-  tag: 1.18.0
+  tag: 1.19.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -42,10 +43,12 @@ serviceAccount:
   # serviceAccount.name -- The name of the service account to use. If not set and create is true, a name is generated using the fullname template
   name:
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -59,7 +62,8 @@ service:
 
 ingress:
   enabled: false
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -75,7 +79,8 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
+resources:
+  {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
