@@ -28,6 +28,9 @@ resource "helm_release" "minio" {
         policy = "none"
         purge  = "false"
       }]
+      persistence = {
+        size = "20Gi"
+      }
     })
   ]
 }
