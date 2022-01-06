@@ -61,7 +61,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mlflow.mysqlSecretName" . }}
-                  key: password
+                  key: mysql-password
           {{- end }}
             # TODO: make these into secret references, probably.
             - name: AWS_ACCESS_KEY_ID
