@@ -15,12 +15,12 @@ resource "helm_release" "database" {
   ]
 }
 
-resource "kubernetes_secret" "database_password" {
-  metadata {
-    name      = "${var.name_prefix}-mlflow-mysql" # TODO hardcoded name
-    namespace = var.namespace
-  }
-  data = {
-    password = "mlflow123" # TODO: Generate passwords # pragma: allowlist secret
-  }
-}
+# resource "kubernetes_secret" "database_password" {
+#   metadata {
+#     name      = "${var.name_prefix}-mlflow-mysql" # TODO hardcoded name
+#     namespace = var.namespace
+#   }
+#   data = {
+#     password = "mlflow123" # TODO: Generate passwords # pragma: allowlist secret
+#   }
+# }
