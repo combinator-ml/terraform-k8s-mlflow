@@ -18,7 +18,7 @@ locals {
   }
   database_chart_repository = "https://charts.bitnami.com/bitnami"
   database_chart_name       = "mysql"
-  database_chart_version    = "8.0.0"
+  database_chart_version    = "8.9.6"
   database_values = {
     auth = {
       rootPassword = "mysql123" # TODO: Generate passwords # pragma: allowlist secret
